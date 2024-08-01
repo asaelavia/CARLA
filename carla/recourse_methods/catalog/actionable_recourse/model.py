@@ -190,6 +190,8 @@ class ActionableRecourse(RecourseMethod):
         if (coeffs is None) and (intercepts is None):
             log.info("Start generating LIME coefficients")
             coeffs, intercepts = self._get_lime_coefficients(factuals)
+            self.lime_coeffs = coeffs
+            self.lime_intercepts = intercepts
             log.info("Finished generating LIME coefficients")
         else:
             # Local explanations via LIME generate coeffs and intercepts per instance, while global explanations

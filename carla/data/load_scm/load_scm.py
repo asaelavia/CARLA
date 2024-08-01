@@ -1,9 +1,11 @@
 import numpy as np
 
-from .scm import sanity_3_lin
+from .scm import sanity_3_lin,sanity_5_lin,german_credit
 
 scm_dict = {
     "sanity-3-lin": sanity_3_lin,
+    "sanity-5-lin": sanity_5_lin,
+    "german" : german_credit,
 }
 
 

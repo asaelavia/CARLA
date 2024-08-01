@@ -90,7 +90,7 @@ class CausalRecourse(RecourseMethod):
         "sampler_handle": samplers.sample_true_m0,
     }
 
-    def __init__(self, mlmodel: MLModelCatalog, hyperparams: Dict):
+    def __init__(self, mlmodel: MLModelCatalog, hyperparams: Dict,scaler):
 
         supported_backends = ["tensorflow", "pytorch"]
         if mlmodel.backend not in supported_backends:
@@ -99,6 +99,7 @@ class CausalRecourse(RecourseMethod):
             )
 
         self._mlmodel = mlmodel
+        self._scaler = scaler
         self._dataset = mlmodel.data
 
         checked_hyperparams = merge_default_parameters(
@@ -171,7 +172,7 @@ class CausalRecourse(RecourseMethod):
                     factual_instance,
                     action_set,
                     sampling_handle,
-                    self._mlmodel,
+                    self._mlmodel,self._scaler
                 ):
                     cost = action_set_cost(
                         factual_instance, action_set, max_values - min_values
@@ -195,6 +196,7 @@ class CausalRecourse(RecourseMethod):
         cfs = []
         # actions = []
         for index, factual_instance in factual_df.iterrows():
+            print(index)
             min_action_set, _ = self.compute_optimal_action_set(
                 factual_instance, self._constraint_handle, self._sampler_handle
             )

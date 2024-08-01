@@ -1,7 +1,9 @@
+from sklearn.preprocessing import StandardScaler
+
 from .sampler import Sampler
 
 
-def point_constraint(scm, factual_instance, action_set, sampling_handle, mlmodel):
+def point_constraint(scm, factual_instance, action_set, sampling_handle, mlmodel,scaler:StandardScaler):
     """
     Check if perturbed factual instance is a counterfactual.
 
@@ -29,6 +31,7 @@ def point_constraint(scm, factual_instance, action_set, sampling_handle, mlmodel
 
     sampler = Sampler(scm)
     cf_instance = sampler.sample(1, factual_instance, action_set, sampling_handle)
-
+    # continuous = ["x1", "x4", "x5", "x6", "x7"]
+    # cf_instance[continuous] = scaler.transform(cf_instance[continuous])
     prediction = mlmodel.predict(cf_instance)
     return prediction.round() == 1

@@ -59,6 +59,7 @@ class GrowingSpheres(RecourseMethod):
         self._categorical_enc = encode_feature_names(
             self._mlmodel.data.categorical, self._mlmodel.feature_input_order
         )
+        # self._categorical_enc.remove('education_num')
 
     def get_counterfactuals(self, factuals: pd.DataFrame) -> pd.DataFrame:
 

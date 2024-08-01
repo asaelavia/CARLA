@@ -118,7 +118,7 @@ def train_model(
     elif catalog_model.backend == "sklearn":
         if catalog_model.model_type == "forest":
             random_forest_model = RandomForestClassifier(
-                n_estimators=n_estimators, max_depth=max_depth
+                n_estimators=n_estimators, max_depth=max_depth,random_state=42
             )
             random_forest_model.fit(X=x_train, y=y_train)
             train_score = random_forest_model.score(X=x_train, y=y_train)
