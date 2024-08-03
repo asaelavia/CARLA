@@ -73,8 +73,8 @@ class Clue(RecourseMethod):
         "width": 10,
         "depth": 3,
         "latent_dim": 12,
-        "batch_size": 64,
-        "epochs": 10,
+        "batch_size": 128,
+        "epochs": 30,
         "lr": 0.001,
         "early_stop": 10,
     }
@@ -110,7 +110,8 @@ class Clue(RecourseMethod):
         # indicate dimensions of inputs -- input_dim_vec: (if binary = 2; if continuous = 1)
         input_dims_continuous = list(np.repeat(1, len(self._mlmodel.data.continuous)))
         input_dims_binary = list(np.repeat(1, len(self._mlmodel.data.categorical)))
-        self._input_dimension = input_dims_continuous + input_dims_binary
+        # self._input_dimension = input_dims_continuous + input_dims_binary
+        self._input_dimension = list(np.repeat(1, data.df.shape[1]-1))
 
         # load autoencoder
         self._vae = self._load_vae()

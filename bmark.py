@@ -16,6 +16,7 @@ warnings.filterwarnings("ignore")
 data_name = "adult"
 # dataset = OnlineCatalog(data_name)
 dataset = AdultCatalog(data_name,encoding_method='Identity')
+# dataset = AdultCatalog(data_name)
 
 # load catalog model
 model_type = "ann"
@@ -35,12 +36,12 @@ ml_model.train(
     hidden_size=training_params["hidden_size"]
 )
 
-hyperparams = {
-    "data_name": data_name,
-    "vae_params": {
-        "layers": [sum(ml_model.get_mutable_mask()), 16, 8],
-    },
-}
+# hyperparams = {
+#     "data_name": data_name,
+#     "vae_params": {
+#         "layers": [sum(ml_model.get_mutable_mask()), 16, 8],
+#     },
+# }
 # ml_model = MLModelCatalog(
 #     dataset,
 #     model_type="forest",
@@ -58,12 +59,12 @@ hyperparams = {
 
 # define your recourse method
 
-recourse_method = recourse_catalog.Face(ml_model,hyperparams)
-recourse_method.mode = "epsilon"
+# recourse_method = recourse_catalog.Face(ml_model,hyperparams)
+# recourse_method.mode = "epsilon"
 
-# coeffs, intercepts = None, None
-# recourse_method = recourse_catalog.ActionableRecourse(
-#         ml_model, coeffs=coeffs, intercepts=intercepts)
+coeffs, intercepts = None, None
+recourse_method = recourse_catalog.ActionableRecourse(
+        ml_model, coeffs=coeffs, intercepts=intercepts)
 
 # hyperparams = {
 #     "data_name": data_name,
@@ -73,6 +74,7 @@ recourse_method.mode = "epsilon"
 # }
 
 # recourse_method = recourse_catalog.CRUD(ml_model, hyperparams)
+# recourse_method = recourse_catalog.Clue(dataset,ml_model, hyperparams)
 
 # get some negative instances
 factuals = predict_negative_instances(ml_model, dataset.df)
@@ -100,9 +102,14 @@ counterfactuals = recourse_method.get_counterfactuals(factuals)
 #     res = pickle.load(f)
 
 # Usage
+with open('AR/ar_pre.pkl', 'wb') as f:
+    pickle.dump([factuals,counterfactuals], f)
+
 original_factuals = dataset.inverse_transform(factuals)
 original_counterfactuals = dataset.inverse_transform(counterfactuals.dropna())
 
+with open('AR/ar_post.pkl', 'wb') as f:
+    pickle.dump([original_factuals,original_counterfactuals], f)
 # now run all implemented measurements and create a
 # DataFrame which consists of all results
 # results = benchmark.run_benchmark(evaluation_measures)

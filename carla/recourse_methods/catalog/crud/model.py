@@ -77,9 +77,9 @@ class CRUD(RecourseMethod):
         "vae_params": {
             "layers": None,
             "train": True,
-            "epochs": 5,
+            "epochs": 20,
             "lr": 1e-3,
-            "batch_size": 32,
+            "batch_size": 128,
         },
     }
 

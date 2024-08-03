@@ -20,7 +20,7 @@ def training(
     depth=2,
     latent_dim=6,
     batch_size=128,
-    nb_epochs=10,
+    nb_epochs=30,
     lr=1e-3,
     early_stop=25,
 ):
