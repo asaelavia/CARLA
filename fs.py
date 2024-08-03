@@ -145,12 +145,12 @@ def extract_data():
 
 
 def train_model(x_train, x_test, y_train, y_test):
-    if os.path.exists("model_lime1.pkl"):
-        with open('model_lime1.pkl', 'rb') as f:
+    if os.path.exists("model_lin.pkl"):
+        with open('model_lin.pkl', 'rb') as f:
             return pickle.load(f)
     model = SVC(kernel='linear', probability=True)
     model.fit(x_train, y_train)
-    with open('model_lime1.pkl', 'wb') as f:
+    with open('model_lin.pkl', 'wb') as f:
         pickle.dump(model, f)
     print("Model accuracy score: " + str(accuracy_score(y_test, model.predict(x_test))))
     return model
@@ -396,7 +396,7 @@ def solve_with_constraints(row, dataset, found_points, constraints, cons_functio
             # Comment for non Constraints
             s.add([Not(And(clause)) for clause in clauses])
         opt = s.minimize(total_dist)
-        s.set(timeout=30000)
+        s.set(timeout=10000)
         res = s.check().r
         s.lower(opt)
         if res != -1:
@@ -453,8 +453,8 @@ if __name__ == "__main__":
         data = pickle.load(f)
     x_train, x_test, y_train, y_test = data[6].drop(['label'], axis=1), data[7].drop(['label'], axis=1), data[6][
         'label'], data[7]['label']
-    # model = train_model(x_train, x_test, y_train, y_test)
-    # coefs_l, intercept_l = model.coef_[0], model.intercept_[0]
+    model = train_model(x_train, x_test, y_train, y_test)
+    coefs_l, intercept_l = model.coef_[0], model.intercept_[0]
     # rows_to_run = x_test[y_test == 0][:num_of_rows_to_run]
     rows_to_run = data[3].drop('label', axis=1)
     # coefs_dic = {col: val for col, val in zip(x_train.columns, coefs)}
@@ -471,7 +471,7 @@ if __name__ == "__main__":
             # coefs_l, intercept_l = lime_lin(x_train, model_for_lime, y_train, rows_to_run.iloc[i])
             # print(model_for_lime.coef_[0], model_for_lime.intercept_[0])
             # print(coefs_l, intercept_l)
-            coefs_l, intercept_l = data[1][i, :], data[2][i]
+            # coefs_l, intercept_l = data[1][i, :], data[2][i]
             coefs_dic_l = {col: val for col, val in zip(x_train.columns, coefs_l)}
             returned_lst[i].append(
                 solve_with_constraints(rows_to_run.iloc[i], x_train, returned_lst[i], constraints, cons_function,
